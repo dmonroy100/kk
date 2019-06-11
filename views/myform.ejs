@@ -1,0 +1,13 @@
+<%- include('bootheader') -%>
+<%- include('menubar') -%>
+    <div class="jumbotron">
+        <h1>Global webpage for recipes</h1>
+        <p>add comments to this recipe you found online</p>
+    </div>
+
+    <form method = "post" action = "/processform">
+      URL: <input type="text" name="url"> <br>
+      <input type="submit">
+    </form>
+
+<%- include('bootfooter') -%>
