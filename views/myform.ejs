@@ -2,12 +2,14 @@
 <%- include('menubar') -%>
     <div class="jumbotron">
         <h1>Global webpage for recipes</h1>
-        <p>add comments to this recipe you found online</p>
+        <h2>Enter your favorite dinner dish!</h2>
     </div>
 
     <form method = "post" action = "/processform">
-      URL: <input type="text" name="url"> <br>
+      Dish Name: <input type="text" name="dish"> <br><br>
+      Comments: <textarea name="theComments"></textarea>
+
       <input type="submit">
     </form>
-
+    
 <%- include('bootfooter') -%>

@@ -34,8 +34,9 @@ app.get('/myform', function(req, res, next) {
 
 app.post('/processform', function(req, res, next) {
   console.dir(req.body)
+  console.log("dish = "+req.body.dish)
   res.render('formdata',
-    {title:"Form Data", url:req.body.url, coms:req.body.theComments})
+    {title:"Form Data", dish:req.body.dish, coms:req.body.theComments})
 });
 // app.use('/', indexRouter);  // this is how we use a router to handle the / path
 // but here we are more direct
