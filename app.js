@@ -4,6 +4,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const mongoose = require( 'mongoose' );
+mongoose.connect( 'mongodb://localhost/mydb' );
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("we are connected!!!")
+});
+
+const commentController = require('./controllers/commentController')
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -32,12 +42,9 @@ app.get('/myform', function(req, res, next) {
   res.render('myform',{title:"Form Demo"});
 });
 
-app.post('/processform', function(req, res, next) {
-  console.dir(req.body)
-  console.log("dish = "+req.body.dish)
-  res.render('formdata',
-    {title:"Form Data", dish:req.body.dish, coms:req.body.theComments})
-});
+app.post('/processform', commentController.saveComment);
+
+app.get('/showComments', commentController.getAllComments);
 // app.use('/', indexRouter);  // this is how we use a router to handle the / path
 // but here we are more direct
 
