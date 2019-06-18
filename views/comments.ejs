@@ -5,10 +5,16 @@
 </div>
 <ol>
 <% for(i = 0; i<comments.length; i++){  %>
-    <li> <a href="<%= comments[i].url %>">
-          <%= comments[i].url %></a>
+    <li> <a href="<%= comments[i].dish %>">
+          <%= comments[i].dish %></a>
           <i>
          <%= comments[i].comment %></\/i> </li>
 <% } %>
 </ol>
+
+YUM!!!!
+<br>
+<br>
+<img src="https://media.giphy.com/media/5ev3alRsskWA0/giphy.gif">
+
 <%- include('bootfooter') -%>

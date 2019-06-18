@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 const mongoose = require( 'mongoose' );
-mongoose.connect( 'mongodb://localhost/mydb' );
+mongoose.connect( 'mongodb://localhost/mysdb' );
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -13,6 +13,7 @@ db.once('open', function() {
 });
 
 const commentController = require('./controllers/commentController')
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -45,8 +46,7 @@ app.get('/myform', function(req, res, next) {
 app.post('/processform', commentController.saveComment);
 
 app.get('/showComments', commentController.getAllComments);
-// app.use('/', indexRouter);  // this is how we use a router to handle the / path
-// but here we are more direct
+app.use('/', indexRouter);  // this is how we use a router to handle the / path
 
 
 
