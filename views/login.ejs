@@ -1,0 +1,23 @@
+<%- include('bootheader') -%>
+<%- include('menubar') -%>
+    <div class="jumbotron">
+        <h1>Kollege Kitchen Comment Form</h1>
+        <p>add comments to any page on the web ...</p>
+    </div>
+
+    <form method="post" action="/processform">
+
+      You must be logged in to submit form info.
+      <br>
+      <br>
+      Dish: <input type="text" name="dish">
+      <br>
+      <br>
+      comments: <textarea name="comment"></textarea>
+      <% if (loggedIn) { %>
+      <input type="submit">
+      <% } else { %>
+        <% } %>
+    </form>
+
+<%- include('bootfooter') -%>

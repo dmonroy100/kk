@@ -3,15 +3,16 @@
 <div class="jumbotron">
     <h1>Comments</h1>
 </div>
+
 <ol>
 <% for(i = 0; i<comments.length; i++){  %>
-    <li> <a href="<%= comments[i].dish %>">
+    <li> <a href="/showComment/<%= comments[i]._id %>">
           <%= comments[i].dish %></a>
           <i>
          <%= comments[i].comment %></\/i> </li>
 <% } %>
-</ol>
-
+<br>
+<br>
 YUM!!!!
 <br>
 <br>

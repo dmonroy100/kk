@@ -4,9 +4,11 @@ const Comment = require( '../models/Comment' );
 exports.saveComment = ( req, res ) => {
   //console.log("in saveSkill!")
   //console.dir(req)
+
+  //update user info for current user...
   let newComment = new Comment(
    {
-    dish: req.body.dish,
+    url: req.body.url,
     comment: req.body.comment
    }
   )
@@ -22,6 +24,8 @@ exports.saveComment = ( req, res ) => {
     } );
 };
 
+
+
 // this displays all of the skills
 exports.getAllComments = ( req, res ) => {
   //gconsle.log('in getAllSkills')
@@ -30,6 +34,27 @@ exports.getAllComments = ( req, res ) => {
     .then( ( comments ) => {
       res.render( 'comments', {
         comments:comments, title:"Comments"
+      } );
+    } )
+    .catch( ( error ) => {
+      console.log( error.message );
+      return [];
+    } )
+    .then( () => {
+      //console.log( 'skill promise complete' );
+    } );
+};
+
+// this displays all of the skills
+exports.getOneComment = ( req, res ) => {
+  //gconsle.log('in getAllSkills')
+  const id = req.params.id
+  console.log('the id is '+id)
+  Comment.findOne({_id:id})
+    .exec()
+    .then( ( comment ) => {
+      res.render( 'comment', {
+        comment:comment, title:"Comment"
       } );
     } )
     .catch( ( error ) => {
