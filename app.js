@@ -22,6 +22,7 @@ db.once('open', function() {
 });
 
 const commentController = require('./controllers/commentController')
+const profileController = require('./controllers/profileController')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -145,11 +146,18 @@ app.get('/profile', isLoggedIn, function(req, res) {
         res.render('profile')
     });
 
-app.get('/editProfile', isLoggedIn, (req,res)=>{
+app.get('/editProfile',isLoggedIn, (req,res)=>{
   res.render('editProfile')
 })
 
-//app.post('/updateProfile', profileController.update)
+app.get('/profiles', isLoggedIn, profileController.getAllProfiles);
+app.get('/showProfile/:id', isLoggedIn, profileController.getOneProfile);
+
+
+app.post('/updateProfile',profileController.update)
+
+// add page for editProfile and views
+// add router for updateProfile and send browser to /profie
 
 // END OF THE AUTHENTICATION ROUTES
 
