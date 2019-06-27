@@ -14,7 +14,7 @@ flash = require('connect-flash')
 // END OF AUTHENTICATION MODULES
 
 const mongoose = require( 'mongoose' );
-mongoose.connect( 'mongodb://localhost/mysdb' );
+mongoose.connect( 'mongodb://localhost/mydb' );
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -23,9 +23,7 @@ db.once('open', function() {
 
 const commentController = require('./controllers/commentController')
 const profileController = require('./controllers/profileController')
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const forumPostController = require('./controllers/forumPostController')
 
 // Authentication
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
@@ -33,6 +31,7 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const passport = require('passport')
 const configPassport = require('./config/passport')
 configPassport(passport)
+
 
 var app = express();
 
@@ -46,6 +45,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
 /*************************************************************************
      HERE ARE THE AUTHENTICATION ROUTES
 **************************************************************************/
@@ -56,6 +57,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+
+
 const approvedLogins = ["tjhickey724@gmail.com","csjbs2018@gmail.com"];
 
 // here is where we check on their logged in status
@@ -63,31 +66,17 @@ app.use((req,res,next) => {
   res.locals.title="Kollege Kitchen"
   res.locals.loggedIn = false
   if (req.isAuthenticated()){
-    if (req.user.googleemail.endsWith("@brandeis.edu") ||
-          approvedLogins.includes(req.user.googleemail))
-          {
-            console.log("user has been Authenticated")
-            res.locals.user = req.user
-            res.locals.loggedIn = true
-          }
-    else {
-      res.locals.loggedIn = false
+      console.log("user has been Authenticated")
+      res.locals.user = req.user
+      res.locals.loggedIn = true
     }
-    console.log('req.user = ')
-    console.dir(req.user)
-    // here is where we can handle whitelisted logins ...
-    if (req.user){
-      if (req.user.googleemail=='dmonroy@brandeis.edu'){
-        console.log("Owner has logged in")
-        res.locals.status = 'owner of app'
-      }else {
-        console.log('User has logged in')
-        res.locals.status = 'user'
-      }
-    }
+  else {
+    res.locals.loggedIn = false
   }
   next()
 })
+
+
 
 // here are the authentication routes
 
@@ -99,9 +88,7 @@ app.get('/login', function(req,res){
   res.render('login',{})
 })
 
-app.get('/quiz1', function(req,res){
-  res.render('quiz1',{})
-})
+
 
 // route for logging out
 app.get('/logout', function(req, res) {
@@ -111,6 +98,7 @@ app.get('/logout', function(req, res) {
         res.redirect('/');
     });
 
+
 // =====================================
 // GOOGLE ROUTES =======================
 // =====================================
@@ -119,12 +107,14 @@ app.get('/logout', function(req, res) {
 // email gets their emails
 app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
 
+
 app.get('/login/authorized',
-  passport.authenticate('google', {
-  successRedirect : '/',
-  failureRedirect : '/loginerror'
-    })
-  );
+        passport.authenticate('google', {
+                successRedirect : '/',
+                failureRedirect : '/loginerror'
+        })
+      );
+
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
@@ -163,37 +153,56 @@ app.post('/updateProfile',profileController.update)
 
 app.use(function(req,res,next){
   console.log("about to look for routes!!!")
+  //console.dir(req.headers)
   next()
 });
 
+
 app.get('/', function(req, res, next) {
-  res.render('index',{title:"Kollege Kitchen"});
+  res.render('index',{title:"YellowCartwheel"});
 });
+
+
+app.get('/forum',forumPostController.getAllForumPosts)
+
+app.post('/forum',forumPostController.saveForumPost)
+
+app.post('/forumDelete',forumPostController.deleteForumPost)
+
+app.get('/showPost/:id',
+        forumPostController.attachAllForumComments,
+        forumPostController.showOnePost)
+
+app.post('/saveForumComment',forumPostController.saveForumComment)
+
+
+
 
 app.get('/griddemo', function(req, res, next) {
   res.render('griddemo',{title:"Grid Demo"});
 });
 
-app.get('/myform', isLoggedIn, function(req, res, next) {
+
+// myform demo ...
+
+app.get('/myform', function(req, res, next) {
   res.render('myform',{title:"Form Demo"});
 });
 
-app.use(function(req,res,next){
-  console.log("about to look for post routes!!!")
-  next()
-});
+app.post('/processform', commentController.saveComment)
+
+app.get('/showComments', commentController.getAllComments)
+// app.use('/', indexRouter);  // this is how we use a router to handle the / path
+// but here we are more direct
+
+app.get('/showComment/:id', commentController.getOneComment)
 
 function processFormData(req,res,next){
   res.render('formdata',
-     {title:"Form Data",dish:req.body.dish, coms:req.body.theComments})
+     {title:"Form Data",url:req.body.url, coms:req.body.theComments})
 }
 
-app.post('/processform', commentController.saveComment);
 
-app.get('/showComments', commentController.getAllComments);
-app.use('/', indexRouter);  // this is how we use a router to handle the / path
-
-app.get('/showComment/:id', commentController.getOneComment);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
