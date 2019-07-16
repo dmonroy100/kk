@@ -1,0 +1,46 @@
+<div class="jumbotron">
+  <h1>Welcome to Recipes Page</h1>
+  <h2>Please make sure you are logged on localhost:5500 first!</h2>
+</div>
+
+<form method="post" action="/recipes">
+  <h2>Please Enter A New Recipe:</h2>
+  Dish Name: <br>
+  <br>
+  <textarea id="recName" name="recName"></textarea>
+  <br>
+  <br>
+  List of Ingredients: <br>
+  <br>
+  <textarea id="recIngredients" name="recIngredients" rows="10" cols="50"></textarea>
+  <br>
+  <br>
+  Description How to Make Dish: <br>
+  <br>
+  <textarea id="recDescription" name="recDescription" rows="15" cols="60"></textarea>
+  <br>
+  <input type="submit">
+</form>
+
+<hr>
+
+<form method="post" action="/recipesDelete">
+
+  <ol>
+    <% for(i = 0; i<recipes.length; i++){  %>
+    <li>
+      <%= recipes[i].userName %>
+      <%= recipes[i].recDateCreated %>
+      <% console.dir([recipes[i].userId,user._id]) %>
+      <% if (recipes[i].userId.equals(user._id)) { %>
+        <input type="checkbox" name="delete" value="<%= recipes[i]._id %>">
+      <% } %>
+      <br>
+      <p>Dish Name: <%= recipes[i].recName %></p>
+      <p>Ingredients: <%= recipes[i].recIngredients %></p>
+      <p>Desctription: <%= recipes[i].recDescription %></p>
+    </li>
+    <% } %>
+  </ol>
+  <input type="submit" value="Delete Checked Recipe">
+</form>

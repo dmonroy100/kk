@@ -24,7 +24,7 @@ db.once('open', function() {
 const commentController = require('./controllers/commentController')
 const profileController = require('./controllers/profileController')
 const forumPostController = require('./controllers/forumPostController')
-
+const recipesController = require('./controllers/recipesController')
 // Authentication
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 // here we set up authentication with passport
@@ -175,8 +175,11 @@ app.get('/showPost/:id',
 
 app.post('/saveForumComment',forumPostController.saveForumComment)
 
+app.get('/recipes',recipesController.getAllRecipes)
 
+app.post('/recipes',recipesController.saveRecipes)
 
+app.post('/recipesDelete',recipesController.deleteRecipes)
 
 app.get('/griddemo', function(req, res, next) {
   res.render('griddemo',{title:"Grid Demo"});
