@@ -2,8 +2,21 @@
 <%- include('menubar') -%>
 
     <div class="jumbotron">
-        <h1>Comment for <%= comment._id %> </h1>
+        <h1> Google Map Search for Restaurants</h1>
     </div>
+
+    <body>
+
+      <script>
+        <div id="map"></div>
+        function initMap(){
+
+        }
+      </script>
+
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6dAm8WwN4njw6ujEL6tlmL6Orocr0Uy8&callback=initMap"
+      async defer></script>
+    </body>
 
 
 <%- include('bootfooter') -%>
